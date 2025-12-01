@@ -40,6 +40,9 @@ plotly>=5.14.0
 
 # Export images statiques depuis Plotly
 kaleido>=0.2.1
+ 
+# Web interface
+Flask>=2.0.0
 
 # Alternative pour export (optionnel)
 # python-kaleido>=0.2.1

@@ -1,0 +1,27 @@
+:root{
+  --bg1:#0f2027; --bg2:#203a43; --accent:#ff6b6b; --card:#ffffffee; --muted:#666;
+}
+.html,body{height:100%}
+body{margin:0;font-family:Inter, Segoe UI, Roboto, 'Helvetica Neue', Arial, sans-serif;background:linear-gradient(135deg,var(--bg1),var(--bg2));color:#fff;min-height:100vh}
+.container{width:92%;max-width:1100px;margin:28px auto;padding:22px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01));box-shadow:0 12px 36px rgba(0,0,0,0.5)}
+.header{display:flex;align-items:center;justify-content:space-between}
+.logo{width:56px;height:56px;border-radius:10px;background:linear-gradient(180deg,var(--accent),#ff9a9a);display:flex;align-items:center;justify-content:center;font-weight:800;color:#210909}
+h1{margin:0;font-size:1.25rem}
+.lead{opacity:0.95}
+.btn{background:var(--accent);border:none;color:#210909;padding:10px 16px;border-radius:8px;font-weight:700;cursor:pointer;box-shadow:0 6px 14px rgba(255,107,107,0.18);transition:transform .12s ease,box-shadow .12s ease}
+.btn:hover{transform:translateY(-3px);box-shadow:0 18px 30px rgba(0,0,0,0.35)}
+.card{background:var(--card);color:#111;border-radius:12px;padding:12px;box-shadow:0 8px 20px rgba(0,0,0,0.18)}
+.console{background:linear-gradient(180deg,#fafafa,#f3f3f3);border-radius:8px;padding:8px}
+.console-pre{font-family:Menlo, Monaco, 'Courier New', monospace;color:#111;margin:0;white-space:pre-wrap;max-height:420px;overflow:auto}
+.grid{display:flex;flex-wrap:wrap;gap:18px;margin-top:18px}
+.images{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-start}
+.thumb{flex:1 1 45%;max-width:45%;border-radius:10px;overflow:hidden;box-shadow:0 10px 24px rgba(0,0,0,0.25);transition:transform .18s ease,filter .18s ease}
+.thumb img{width:100%;height:auto;display:block}
+.thumb:hover{transform:translateY(-6px);filter:brightness(1.02)}
+form.row{display:flex;gap:12px;align-items:center}
+input[type=text], input[type=password]{padding:8px;border-radius:8px;border:1px solid #ddd;width:100%;box-sizing:border-box}
+.table{width:100%;border-collapse:collapse}
+.table th, .table td{padding:8px;border-bottom:1px solid #eee}
+.table th{background:#f5f5f5}
+.footer{margin-top:18px;text-align:right;color:#fff8}
+@media (max-width:720px){.thumb{max-width:100%;flex-basis:100%}.grid .card{flex-basis:100%}.logo{width:48px;height:48px}}

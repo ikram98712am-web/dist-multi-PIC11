@@ -21,10 +21,10 @@ def exemple_btx_complet():
     """
     Exemple complet: Séparation BTX
     """
-    print("\n" + "╔" + "═" * 78 + "╗")
-    print("║" + "DISTILLATION MULTICOMPOSANTS - SYSTÈME BTX".center(78) + "║")
-    print("║" + "Benzène - Toluène - Xylène".center(78) + "║")
-    print("╚" + "═" * 78 + "╝\n")
+    print("\n" + "=" * 80)
+    print("DISTILLATION MULTICOMPOSANTS - SYSTEME BTX".center(80))
+    print("Benzene - Toluene - Xylene".center(80))
+    print("=" * 80 + "\n")
     
     # ========================================================================
     # 1. DÉFINITION DU SYSTÈME
@@ -35,15 +35,14 @@ def exemple_btx_complet():
     # Composés
     compound_names = ['benzene', 'toluene', 'o-xylene']
     print(f"   Composés: {', '.join(compound_names)}")
-    
     compounds = []
     for name in compound_names:
         try:
             comp = Compound(name)
             compounds.append(comp)
-            print(f"   ✓ {comp}")
+            print(f"   [OK] {comp}")
         except Exception as e:
-            print(f"   ✗ Erreur lors du chargement de {name}: {e}")
+            print(f"   [ERR] Erreur lors du chargement de {name}: {e}")
             return
     
     # Package thermodynamique
@@ -56,7 +55,6 @@ def exemple_btx_complet():
     # Alimentation
     F = 100.0  # kmol/h
     z_F = np.array([0.333, 0.333, 0.334])  # 33.3% chacun
-    
     print(f"   Débit alimentation: {F:.1f} kmol/h")
     print("   Composition alimentation:")
     for i, name in enumerate(compound_names):
@@ -78,7 +76,7 @@ def exemple_btx_complet():
     # Spécifications de séparation
     recovery_LK_D = 0.95  # 95% du benzène dans distillat
     recovery_HK_B = 0.95  # 95% du toluène dans résidu
-    R_factor = 1.3  # R = 1.3 × R_min
+    R_factor = 1.3  # R = 1.3 x R_min
     q = 1.0  # Alimentation liquide saturée
     efficiency = 0.70  # Efficacité des plateaux 70%
     
@@ -143,10 +141,10 @@ def exemple_btx_complet():
                             (compounds[-1].Tb - compounds[0].Tb) * (j / N_real)
             y_profiles[j, :] = x_stage
     
-    print(f"   ✓ Profils estimés pour {N_real} plateaux")
-    print(f"   • Température tête:  {temperatures[0]-273.15:.1f}°C")
-    print(f"   • Température fond:  {temperatures[-1]-273.15:.1f}°C")
-    print(f"   • ΔT colonne:        {(temperatures[-1]-temperatures[0]):.1f} K")
+    print(f"   [OK] Profils estimés pour {N_real} plateaux")
+    print(f"   - Température tête:  {temperatures[0]-273.15:.1f}C")
+    print(f"   - Température fond:  {temperatures[-1]-273.15:.1f}C")
+    print(f"   - ΔT colonne:        {(temperatures[-1]-temperatures[0]):.1f} K")
     
     # ========================================================================
     # 5. VISUALISATIONS
@@ -187,7 +185,7 @@ def exemple_btx_complet():
             results['feed_stage']
         )
     except Exception as e:
-        print(f"   ⚠ Visualisation Plotly non disponible: {e}")
+        print(f"   [WARN] Visualisation Plotly non disponible: {e}")
     
     # Profil de température
     print("   Génération: profil de température...")
@@ -207,28 +205,19 @@ def exemple_btx_complet():
     print(f"{'Composé':<15} {'Alim (kmol/h)':<15} {'Dist (kmol/h)':<15} "
           f"{'Rés (kmol/h)':<15} {'Récup D (%)':<12}")
     print("-" * 80)
-    
     for i, name in enumerate(compound_names):
-        F_i = F * z_F[i]
-        D_i = results['D'] * results['x_D'][i]
-        B_i = results['B'] * results['x_B'][i]
+        F_i, D_i, B_i = F * z_F[i], results['D'] * results['x_D'][i], results['B'] * results['x_B'][i]
         recovery = (D_i / F_i) * 100 if F_i > 0 else 0
-        
         print(f"{name:<15} {F_i:<15.2f} {D_i:<15.2f} {B_i:<15.2f} {recovery:<12.1f}")
     
     print("-" * 80)
     print(f"{'TOTAL':<15} {F:<15.2f} {results['D']:<15.2f} "
           f"{results['B']:<15.2f}")
-    
-    # Vérification des bilans
     print("\nVérification des bilans matières:")
     error = abs(F - results['D'] - results['B'])
     print(f"   Erreur globale: {error:.2e} kmol/h")
-    
     for i, name in enumerate(compound_names):
-        F_i = F * z_F[i]
-        D_i = results['D'] * results['x_D'][i]
-        B_i = results['B'] * results['x_B'][i]
+        F_i, D_i, B_i = F * z_F[i], results['D'] * results['x_D'][i], results['B'] * results['x_B'][i]
         error_i = abs(F_i - D_i - B_i)
         print(f"   Erreur {name:10s}: {error_i:.2e} kmol/h")
     
@@ -248,23 +237,17 @@ def exemple_btx_complet():
     H_V_bottom = thermo.mixture_enthalpy_vapor(T_bottom, results['x_B'])
     H_L_bottom = thermo.mixture_enthalpy_liquid(T_bottom, results['x_B'])
     
-    # Chaleur de condensation
-    V = results['V']  # kmol/h
-    Q_condenser = V * (H_V_top - H_L_top) / 1000  # kW (approximation)
-    
-    # Chaleur de rebouillage
-    V_bottom = V  # Approximation CMO
-    Q_reboiler = V_bottom * (H_V_bottom - H_L_bottom) / 1000  # kW
+    # Chaleurs
+    V = results['V']
+    Q_condenser, Q_reboiler = V * (H_V_top - H_L_top) / 1000, V * (H_V_bottom - H_L_bottom) / 1000
     
     print(f"\nBesoins énergétiques (estimation):")
     print(f"   • Condenseur:  {abs(Q_condenser):.1f} kW (refroidissement)")
     print(f"   • Rebouilleur: {Q_reboiler:.1f} kW (chauffage)")
     print(f"   • Rapport Q_R/Q_C: {Q_reboiler/abs(Q_condenser):.2f}")
-    
     # Consommation vapeur (vapeur à 3 bar ≈ 2100 kJ/kg)
-    latent_heat_steam = 2100  # kJ/kg
-    steam_consumption = Q_reboiler / latent_heat_steam * 3600  # kg/h
-    
+    latent_heat_steam = 2100
+    steam_consumption = Q_reboiler / latent_heat_steam * 3600
     print(f"\nConsommation de vapeur (3 bar):")
     print(f"   • {steam_consumption:.1f} kg/h")
     print(f"   • Ratio vapeur/alimentation: {steam_consumption/(F*80):.2f} kg_vapeur/kg_produit")
@@ -272,21 +255,21 @@ def exemple_btx_complet():
     # ========================================================================
     # 8. CONCLUSION
     # ========================================================================
-    print("\n" + "╔" + "═" * 78 + "╗")
-    print("║" + "DIMENSIONNEMENT TERMINÉ AVEC SUCCÈS".center(78) + "║")
-    print("╚" + "═" * 78 + "╝")
+    print("\n" + "=" * 80)
+    print("DIMENSIONNEMENT TERMINE AVEC SUCCES".center(80))
+    print("=" * 80)
     
     print("\nFichiers générés:")
-    print("   ✓ btx_bilan_matiere.png")
-    print("   ✓ btx_shortcut_results.png")
-    print("   ✓ btx_composition_profiles.png")
-    print("   ✓ btx_temperature_profile.png")
-    print("   ✓ composition_profiles_interactive.html (si Plotly disponible)")
+    print("   [OK] btx_bilan_matiere.png")
+    print("   [OK] btx_shortcut_results.png")
+    print("   [OK] btx_composition_profiles.png")
+    print("   [OK] btx_temperature_profile.png")
+    print("   [OK] composition_profiles_interactive.html (si Plotly disponible)")
     
     print("\nPour une simulation plus précise, utiliser:")
-    print("   → Méthode MESH rigoureuse (mesh_solver.py)")
-    print("   → Validation avec Aspen Plus")
-    print("   → Optimisation des paramètres")
+    print("   - Méthode MESH rigoureuse (mesh_solver.py)")
+    print("   - Validation avec Aspen Plus")
+    print("   - Optimisation des paramètres")
     
     return results, thermo, visualizer
 
@@ -294,9 +277,11 @@ def etude_parametrique_reflux():
     """
     Étude de l'effet du reflux sur le nombre de plateaux
     """
-    print("\n" + "╔" + "═" * 78 + "╗")
-    print("║" + "ÉTUDE PARAMÉTRIQUE: EFFET DU REFLUX".center(78) + "║")
-    print("╚" + "═" * 78 + "╝\n")
+    print("\n" + "=" * 80)
+    print("=" * 80)
+    print("ETUDE PARAMETRIQUE: EFFET DU REFLUX".center(80))
+    print("=" * 80)
+    print("=" * 80 + "\n")
     
     # Système BTX
     compound_names = ['benzene', 'toluene', 'o-xylene']
@@ -347,7 +332,7 @@ def etude_parametrique_reflux():
     
     plt.tight_layout()
     plt.savefig('btx_etude_reflux.png', dpi=300, bbox_inches='tight')
-    print("✓ Graphique sauvegardé: btx_etude_reflux.png")
+    print("[OK] Graphique sauvegarde: btx_etude_reflux.png")
     plt.show()
     
     print(f"\nRésultats de l'étude:")
@@ -360,30 +345,32 @@ if __name__ == "__main__":
     """
     Point d'entrée principal
     """
-    print("\n" + "█" * 80)
-    print("█" + " " * 78 + "█")
-    print("█" + "MODÉLISATION ET SIMULATION DE DISTILLATION MULTICOMPOSANTS".center(78) + "█")
-    print("█" + "Cours: Modélisation et Simulation des Procédés - PIC".center(78) + "█")
-    print("█" + "Prof. BAKHER Zine Elabidine - UM6P".center(78) + "█")
-    print("█" + " " * 78 + "█")
-    print("█" * 80 + "\n")
+    print("\n" + "=" * 80)
+    print("=" * 80)
+    print("MODÉLISATION ET SIMULATION DE DISTILLATION MULTICOMPOSANTS".center(80))
+    print("Cours: Modélisation et Simulation des Procédés - PIC".center(80))
+    print("Prof. BAKHER Zine Elabidine - UM6P".center(80))
+    print("=" * 80)
+    print("=" * 80 + "\n")
     
     try:
         # Exemple principal
         results, thermo, visualizer = exemple_btx_complet()
         
         # Étude paramétrique
-        print("\n" + "─" * 80)
+        print("\n" + "-" * 80)
         input("\nAppuyez sur Entrée pour lancer l'étude paramétrique du reflux...")
         etude_parametrique_reflux()
         
-        print("\n" + "█" * 80)
-        print("█" + "SIMULATION COMPLÉTÉE AVEC SUCCÈS".center(78) + "█")
-        print("█" * 80 + "\n")
+        print("\n" + "=" * 80)
+        print("=" * 80)
+        print("SIMULATION COMPLÉTÉE AVEC SUCCÈS".center(80))
+        print("=" * 80)
+        print("=" * 80 + "\n")
         
     except KeyboardInterrupt:
-        print("\n\n⚠ Simulation interrompue par l'utilisateur")
+        print("\n\n[WARN] Simulation interrompue par l'utilisateur")
     except Exception as e:
-        print(f"\n\n✗ Erreur lors de la simulation: {e}")
+        print(f"\n\n[ERR] Erreur lors de la simulation: {e}")
         import traceback
         traceback.print_exc()

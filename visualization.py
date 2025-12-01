@@ -21,7 +21,7 @@ except ImportError:
 
 class DistillationVisualizer:
     """
-    Classe pour visualiser les résultats de distillation multicomposants
+    Classe pour visualiser les resultats de distillation multicomposants
     """
     
     def __init__(self, compound_names):
@@ -29,7 +29,7 @@ class DistillationVisualizer:
         Parameters:
         -----------
         compound_names : list of str
-            Noms des composés
+            Noms des composes
         """
         self.compound_names = compound_names
         self.n_comp = len(compound_names)
@@ -40,14 +40,14 @@ class DistillationVisualizer:
     
     def plot_material_balance(self, F, D, B, z_F, x_D, x_B, save_path='bilan_matiere.png'):
         """
-        Visualise les bilans matières
+        Visualise les bilans matieres
         """
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
-        fig.suptitle('Bilans Matières de la Colonne de Distillation',
+        fig.suptitle('Bilans Matieres de la Colonne de Distillation',
                      fontsize=14, fontweight='bold')
         
-        # Graphique 1: Débits
-        streams = ['Alimentation', 'Distillat', 'Résidu']
+        # Graphique 1: Debits
+        streams = ['Alimentation', 'Distillat', 'Residu']
         flows = [F, D, B]
         colors_streams = ['blue', 'green', 'red']
         
@@ -60,8 +60,8 @@ class DistillationVisualizer:
                     f'{flow:.1f}\nkmol/h',
                     ha='center', va='bottom', fontweight='bold', fontsize=10)
         
-        ax1.set_ylabel('Débit (kmol/h)', fontsize=11, fontweight='bold')
-        ax1.set_title('Débits des flux', fontsize=12, fontweight='bold')
+        ax1.set_ylabel('Debit (kmol/h)', fontsize=11, fontweight='bold')
+        ax1.set_title('Debits des flux', fontsize=12, fontweight='bold')
         ax1.grid(True, alpha=0.3, axis='y')
         ax1.set_ylim([0, max(flows) * 1.2])
         
@@ -73,10 +73,10 @@ class DistillationVisualizer:
                        color='blue', alpha=0.7, edgecolor='black')
         bars2 = ax2.bar(x, x_D, width, label='Distillat',
                        color='green', alpha=0.7, edgecolor='black')
-        bars3 = ax2.bar(x + width, x_B, width, label='Résidu',
+        bars3 = ax2.bar(x + width, x_B, width, label='Residu',
                        color='red', alpha=0.7, edgecolor='black')
         
-        ax2.set_xlabel('Composé', fontsize=11, fontweight='bold')
+        ax2.set_xlabel('Compose', fontsize=11, fontweight='bold')
         ax2.set_ylabel('Fraction molaire', fontsize=11, fontweight='bold')
         ax2.set_title('Compositions des flux', fontsize=12, fontweight='bold')
         ax2.set_xticks(x)
@@ -87,19 +87,19 @@ class DistillationVisualizer:
         
         plt.tight_layout()
         plt.savefig(save_path, dpi=300, bbox_inches='tight')
-        print(f"✓ Graphique sauvegardé: {save_path}")
+        print(f"[OK] Graphique sauvegarde: {save_path}")
         plt.close()
     
     def plot_shortcut_results(self, results, save_path='shortcut_results.png'):
         """
-        Visualise les résultats des méthodes simplifiées
+        Visualise les resultats des methodes simplifiees
         """
         fig = plt.figure(figsize=(16, 10))
         gs = fig.add_gridspec(3, 3, hspace=0.3, wspace=0.3)
-        fig.suptitle('Résultats du Dimensionnement (Méthodes Simplifiées)',
+        fig.suptitle('Resultats du Dimensionnement (Methodes Simplifiees)',
                      fontsize=16, fontweight='bold')
         
-        # 1. Schéma de la colonne
+        # 1. Schema de la colonne
         ax1 = fig.add_subplot(gs[:, 0])
         self._draw_column_schematic(ax1, results)
         
@@ -224,7 +224,7 @@ class DistillationVisualizer:
                     table[(i, j)].set_facecolor('#f0f0f0')
         
         plt.savefig(save_path, dpi=300, bbox_inches='tight')
-        print(f"✓ Graphique sauvegardé: {save_path}")
+        print(f"[OK] Graphique sauvegarde: {save_path}")
         plt.close()
     
     def _draw_column_schematic(self, ax, results):
@@ -353,7 +353,7 @@ Plateau alim = {results['feed_stage']}"""
         
         plt.tight_layout()
         plt.savefig(save_path, dpi=300, bbox_inches='tight')
-        print(f"✓ Graphique sauvegardé: {save_path}")
+        print(f"[OK] Graphique sauvegarde: {save_path}")
         plt.close()
     
     def plot_composition_profiles_plotly(self, stages, x_profiles, y_profiles, feed_stage):
@@ -451,7 +451,7 @@ Plateau alim = {results['feed_stage']}"""
         
         # Sauvegarder en HTML
         fig.write_html('composition_profiles_interactive.html')
-        print("✓ Graphique interactif sauvegardé: composition_profiles_interactive.html")
+        print("[OK] Graphique interactif sauvegarde: composition_profiles_interactive.html")
         
         # Afficher
         fig.show()
@@ -484,51 +484,49 @@ Plateau alim = {results['feed_stage']}"""
         T_bottom = temperatures[-1] - 273.15
         ax.text(T_top, 1, f'  {T_top:.1f}°C', ha='left', va='center',
                fontsize=10, fontweight='bold', color='darkred')
-        ax.text(T_bottom, len(stages), f'  {T_bottom:.1f}°C', ha='left', va='center',
+        ax.text(T_bottom, len(stages), f'  {T_bottom:.1f}C', ha='left', va='center',
                fontsize=10, fontweight='bold', color='darkred')
         
         plt.tight_layout()
         plt.savefig(save_path, dpi=300, bbox_inches='tight')
-        print(f"✓ Graphique sauvegardé: {save_path}")
+        print(f"[OK] Graphique sauvegarde: {save_path}")
         plt.close()
 
 def print_design_summary(shortcut_results, compound_names):
-    """
-    Affiche un résumé formaté du dimensionnement
-    """
-    print("\n" + "╔" + "═" * 78 + "╗")
-    print("║" + "  RÉSUMÉ DU DIMENSIONNEMENT DE LA COLONNE".center(78) + "║")
-    print("╚" + "═" * 78 + "╝")
+    """Affiche un resume formate du dimensionnement"""
+    print("\n" + "=" * 80)
+    print("  RESUME DU DIMENSIONNEMENT DE LA COLONNE".center(80))
+    print("=" * 80)
     
     print(f"\n{'BILANS MATIÈRES':-^80}")
-    print(f"  • Débit alimentation:      {shortcut_results['D'] + shortcut_results['B']:.2f} kmol/h")
-    print(f"  • Débit distillat:         {shortcut_results['D']:.2f} kmol/h")
-    print(f"  • Débit résidu:            {shortcut_results['B']:.2f} kmol/h")
+    print(f"  - {'Débit Alimentation':<20s}: {shortcut_results['D'] + shortcut_results['B']:6.2f}  kmol/h")
+    print(f"  - {'Débit Distillat':<20s}: {shortcut_results['D']:6.2f}  kmol/h")
+    print(f"  - {'Débit Résidu':<20s}: {shortcut_results['B']:6.2f}  kmol/h")
     
     print(f"\n{'COMPOSITION DISTILLAT':-^80}")
     for i, name in enumerate(compound_names):
-        print(f"  • {name:15s}: {shortcut_results['x_D'][i]*100:6.2f}%")
+        print(f"  - {name:15s}: {shortcut_results['x_D'][i]*100:6.2f}%")
     
     print(f"\n{'COMPOSITION RÉSIDU':-^80}")
     for i, name in enumerate(compound_names):
-        print(f"  • {name:15s}: {shortcut_results['x_B'][i]*100:6.2f}%")
+        print(f"  - {name:15s}: {shortcut_results['x_B'][i]*100:6.2f}%")
     
     print(f"\n{'PARAMÈTRES DE CONCEPTION':-^80}")
-    print(f"  • N minimum (Fenske):      {shortcut_results['N_min']:.2f} plateaux")
-    print(f"  • R minimum (Underwood):   {shortcut_results['R_min']:.3f}")
-    print(f"  • R opératoire:            {shortcut_results['R']:.3f}")
-    print(f"  • N théorique (Gilliland): {shortcut_results['N_theoretical']:.2f} plateaux")
-    print(f"  • Efficacité:              {shortcut_results['efficiency']*100:.1f}%")
-    print(f"  • N réel:                  {shortcut_results['N_real']} plateaux")
+    print(f"  - {'N minimum (Fenske)':<30s}: {shortcut_results['N_min']:6.2f} plateaux")
+    print(f"  - {'R minimum (Underwood)':<30s}: {shortcut_results['R_min']:6.3f}")
+    print(f"  - {'R operatoire':<30s}: {shortcut_results['R']:6.3f}")
+    print(f"  - {'N theorique (Gilliland)':<30s}: {shortcut_results['N_theoretical']:6.2f} plateaux")
+    print(f"  - {'Efficacite':<30s}: {shortcut_results['efficiency']*100:6.1f}%")
+    print(f"  - {'N reel':<30s}: {shortcut_results['N_real']} plateaux")
     
     print(f"\n{'LOCALISATION':-^80}")
-    print(f"  • Plateaux rectification:  {shortcut_results['N_R']}")
-    print(f"  • Plateaux épuisement:     {shortcut_results['N_S']}")
-    print(f"  • Plateau alimentation:    {shortcut_results['feed_stage']}")
+    print(f"  - {'Plateaux rectification':<30s}: {shortcut_results['N_R']}")
+    print(f"  - {'Plateaux epuisement':<30s}: {shortcut_results['N_S']}")
+    print(f"  - {'Plateau alimentation':<30s}: {shortcut_results['feed_stage']}")
     
     print(f"\n{'DÉBITS INTERNES':-^80}")
-    print(f"  • Liquide rectification:   {shortcut_results['L']:.2f} kmol/h")
-    print(f"  • Vapeur rectification:    {shortcut_results['V']:.2f} kmol/h")
-    print(f"  • Liquide épuisement:      {shortcut_results['L_prime']:.2f} kmol/h")
+    print(f"  - {'Liquide rectification':<30s}: {shortcut_results['L']:6.2f} kmol/h")
+    print(f"  - {'Vapeur rectification':<30s}: {shortcut_results['V']:6.2f} kmol/h")
+    print(f"  - {'Liquide épuisement':<30s}: {shortcut_results['L_prime']:6.2f} kmol/h")
     
     print("\n" + "=" * 80)
